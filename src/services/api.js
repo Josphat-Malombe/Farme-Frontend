@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.43.91:8000/api',
+  baseURL: 'https://farme-backend.onrender.com/api',
 });
 
 // 1) Request interceptor: attach the access token
