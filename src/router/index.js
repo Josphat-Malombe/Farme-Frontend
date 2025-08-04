@@ -47,10 +47,13 @@ const routes = [
     meta: {guest: true},
     
   },
+  
+
 
   {
+    
     path: '/chat/:sessionId',
-    name: 'chat',
+    name: 'continue-session',
     component: TextChat,
     props: true,
     meta:{requiresAuth: true}

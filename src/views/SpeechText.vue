@@ -27,8 +27,7 @@
           @click="toggleRecording"
           :class="{ recording: isRecording }"
           :disabled="loading"
-          class="record-btn"
-        >
+          class="record-btn">
           {{ isRecording ? 'Stop Recording' : 'Start Recording' }}
         </button>
       </div>
@@ -112,7 +111,7 @@ export default {
       } catch (err) {
         console.error('Error sending voice message:', err);
         this.messages.push({
-          role: 'user',
+          role: 'agent',
           content: 'Error: Could not process voice message.',
         });
         this.$nextTick(() => this.scrollToBottom());

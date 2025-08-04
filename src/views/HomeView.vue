@@ -20,7 +20,7 @@
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
-      <component :is="currentViewComponent" />
+      <component :is="currentViewComponent" :session-id="sessionId" @continue-session="continueSessionFromHistory" @session-ended="clearSession"/>
     </main>
 
     <!-- RIGHT SIDEBAR (PROFILE INFO) -->
@@ -84,7 +84,9 @@ export default {
       currentView: 'chat',
       isMenuOpen: false,
       user:{},
+      sessionId: null,
       defautImage: "/default-profile.png",
+      
     }
   },
   async mounted(){
@@ -117,12 +119,19 @@ export default {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen
     },
-    closeeMenu(){
+    closeMenu(){
       this.isMenuOpen=false
     },
     logout() {
       logoutUser()
       
+    },
+    continueSessionFromHistory(sessionId){
+      this.sessionId=sessionId
+      this.currentView='chat'
+    },
+    clearSession(){
+      this.sessionId=null
     }
   }
 }

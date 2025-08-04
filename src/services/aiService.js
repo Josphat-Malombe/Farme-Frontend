@@ -41,16 +41,14 @@ export async function sendVoiceMessage(sessionId, audioBlob) {
   
   if(sessionId){
     formData.append("session_id",sessionId)
-
-
-
   }
   formData.append("audio", audioBlob, "voice.webm");
+  formData.append("exclude_from_history", true)
 
   return api.post("/voice/", formData, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
+      
     },
   });
 }  

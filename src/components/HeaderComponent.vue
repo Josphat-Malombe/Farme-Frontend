@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div class="logo">🌱 <span>AgriPulse</span></div>
+    <div class="logo">🌱 <span>AgriePulse</span></div>
 
     <!-- Navigation Links -->
     <nav :class="['nav-links', { active: menuOpen }]">

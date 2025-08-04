@@ -54,7 +54,7 @@ export default {
       }
     },
     continueSession(sessionId) {
-      this.$router.push({name:'chat',params:{ sessionId}});
+      this.$emit('continue-session', sessionId)
     },
     async deleteSession(sessionId) {
       if (confirm('Are you sure you want to delete this session?')) {
@@ -62,10 +62,10 @@ export default {
           await api.delete(`/display/session/${sessionId}`);
           this.sessions = this.sessions.filter(session => session.id !== sessionId);
           console.log(`Session ${sessionId} deleted.`); // For debugging
-          // Optionally, emit an event or show a success message
+          
         } catch (err) {
           console.error(`Error deleting session ${sessionId}:`, err);
-          // Implement user-friendly error display here
+          console.log("An error occurred while trying to delete the session.Try again!")
         }
       }
     },

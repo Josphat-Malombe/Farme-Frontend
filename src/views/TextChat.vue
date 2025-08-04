@@ -55,27 +55,50 @@
 </template>
 
 <script>
-import { sendMessage,  getHistory } from '../services/aiService';
+import { sendMessage,  getHistory, createSession } from '../services/aiService';
 //import ChatHistory from '@/components/chat/ChatHistory.vue';
 
 export default {
-  props: ['sessionId'],
-
+  props: {
+    sessionId: {
+      type: String,
+      default: null
+    }
+  },
   data() {
-    return {
-      
-      //sessionId: null,
+    return { 
+      internalSessionId: null,
       messages: [],
       newMessage: '',
       loading: false
     };
   },
-  async mounted() {
-    if(this.sessionId) {
-      await this.loadSession(this.sessionId);
+  watch:{
+    sessionId:{
+      immediate:true,
+      handler(newSessionId){
+        if (newSessionId){
+          this.internalSessionId=newSessionId
+          this.loadSession(newSessionId)
+        }else{
+          this.messages=[]
+          this.internalSessionId=null
+        }
+      }
     }
   },
   methods: {
+    async createSession(){
+      try{
+        const res=await createSession()
+        this.internalSessionId=res.data.id;
+        console.log("new session created",this.internalSessionId)
+      }
+      catch (err) {
+        console.log("failed to create session", err)
+
+      }
+    },
     async loadSession(sessionId){
       
       try{
@@ -97,8 +120,14 @@ export default {
       this.$nextTick(() => this.scrollToBottom());
 
       try {
-        // Use the existing sessionId
-        const res = await sendMessage(this.sessionId, question);
+        if(!this.internalSessionId){
+          const res=await createSession();
+          this.internalSessionId=res.data.id
+          this.$emit('new-session', this.internalSessionId)
+          
+        }
+       
+        const res = await sendMessage(this.internalSessionId, question);
         this.messages.push({ role: 'agent', content: res.data.response });
         this.$nextTick(() => this.scrollToBottom());
       } catch (err) {
@@ -121,6 +150,9 @@ export default {
       const el = e.target;
       el.style.height = 'auto';
       el.style.height = `${el.scrollHeight}px`;
+    },
+    endSession(){
+      this.$emit('session-ended')
     }
   }
 };
