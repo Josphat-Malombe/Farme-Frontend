@@ -33,7 +33,7 @@ export default {
       this.menuOpen = !this.menuOpen;
     },
     goToRegister() {
-      this.$router.push("/auth/register");
+      this.$router.push("/auth/login");
     },
   },
 };
