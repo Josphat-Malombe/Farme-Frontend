@@ -85,7 +85,7 @@ export default {
       isMenuOpen: false,
       user:{},
       sessionId: null,
-      defautImage: "/default-profile.png",
+      defautImage: "/profile.png",
       
     }
   },

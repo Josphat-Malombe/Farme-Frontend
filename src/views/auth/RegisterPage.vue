@@ -17,7 +17,8 @@ export default {
       counties: [],
       constituencies: [],
       wards: [],
-      languages: ['English','Swahili','Kamba']
+      languages: ['English','Swahili','Kamba'],
+      error: '',
     };
   },
   async mounted(){
@@ -71,12 +72,30 @@ export default {
              alert('Registration failed!');
              console.error('Unexpected response:', response);
            }
-        } catch (error) {
-             console.error('Error during registration:', error);
-             alert('Registration failed!');
-  }
-},
-  }
+        } 
+        catch (error) {
+         console.error('Error during registration:', error);
+
+    
+           if (error.response && error.response.data) {
+              const errorData = error.response.data;
+
+          if (typeof errorData === 'string') {
+            this.error = errorData;
+           } else if (typeof errorData === 'object') {
+        
+        const firstErrorKey = Object.keys(errorData)[0];
+        const firstError = errorData[firstErrorKey];
+        this.error = Array.isArray(firstError) ? firstError[0] : firstError;
+      } else {
+        this.error = 'Registration failed. Please try again.';
+      }
+    } else {
+      this.error = 'Unable to connect to server. Please check your connection.';
+      }
+    }
+  },
+ }
 }
 </script>
 
@@ -122,7 +141,10 @@ export default {
         Already have an account?
         <router-link to="/auth/login">Login</router-link>
       </p>
+      <p v-if="error" class="error-msg">{{ error }}</p>
     </div>
+    
+
   </div>
 </template>
 
@@ -197,6 +219,12 @@ export default {
   font-family: 'Orbitron', sans-serif;
   letter-spacing: 2px;
   animation: pulse 2s infinite;
+}
+/* Error message */
+.error-msg {
+  color: #ff4d4d;
+  margin-top: 15px;
+  font-size: 0.9rem;
 }
 
 /* Button */

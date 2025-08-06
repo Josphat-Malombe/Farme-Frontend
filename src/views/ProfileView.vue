@@ -36,17 +36,26 @@
           <input id="phone_number" v-model="profile.phone_number" type="text" class="form-input" />
         </div>
         <div class="form-group">
-          <label for="county" class="form-label">County</label>
-          <input id="county" v-model="profile.county" type="text" class="form-input" />
-        </div>
+         <label for="county" class="form-label">County</label>
+         <select v-model="profile.county" @change="onCountyChange" class="form-input">
+          <option value="">Select County</option>
+          <option v-for="c in counties" :key="c.id" :value="c.id">{{ c.name }}</option>
+        </select>
+       </div>
         <div class="form-group">
           <label for="constituency" class="form-label">Constituency</label>
-          <input id="constituency" v-model="profile.constituency" type="text" class="form-input" />
+          <select v-model="profile.constituency" @change="onConstituencyChange" class="form-input">
+             <option value="">Select Constituency</option>
+             <option v-for="cc in constituencies" :key="cc.id" :value="cc.id">{{ cc.name }}</option>
+          </select>
         </div>
         <div class="form-group">
-          <label for="ward" class="form-label">Ward</label>
-          <input id="ward" v-model="profile.ward" type="text" class="form-input" />
-        </div>
+           <label for="ward" class="form-label">Ward</label>
+           <select v-model="profile.ward" class="form-input">
+               <option value="">Select Ward</option>
+               <option v-for="w in wards" :key="w.id" :value="w.id">{{ w.name }}</option>
+           </select>
+         </div>
         <div class="form-group">
           <label for="language_preference" class="form-label">Language Preference</label>
           <input id="language_preference" v-model="profile.language_preference" type="text" class="form-input" />
@@ -69,7 +78,7 @@
 </template>
 
 <script>
-
+import api from '@/services/api';
 import { getProfile, updateProfile } from '../services/profileService'
 export default {
   data() {
@@ -78,11 +87,23 @@ export default {
       isEditing: false,
       newProfilePic: null,
       imagePreview: null,
-      defaultImage: '/default-profile.png', // fallback image
+      defaultImage: '/profile.png', 
+
+      counties: [],
+      constituencies: [],
+      wards: [],
     };
   },
   async mounted() {
     await this.loadProfile();
+    await this.loadCounties();
+
+     if (this.profile.county) {
+      await this.loadConstituencies(this.profile.county);
+    }
+    if (this.profile.constituency) {
+      await this.loadWards(this.profile.constituency);
+    }
   },
   methods: {
     async loadProfile() {
@@ -91,6 +112,46 @@ export default {
         this.profile = res.data;
       } catch (err) {
         console.error('Error loading profile:', err);
+      }
+    },
+    async loadCounties() {
+      try {
+        const res = await api.get('/counties/');
+        this.counties = res.data;
+      } catch (err) {
+        console.error('Failed to load counties', err);
+      }
+    },
+    async loadConstituencies(countyId) {
+      try {
+        const res = await api.get(`/constituencies/?county=${countyId}`);
+        this.constituencies = res.data;
+      } catch (err) {
+        console.error('Failed to load constituencies', err);
+      }
+    },
+    async loadWards(constituencyId) {
+      try {
+        const res = await api.get(`/wards/?constituency=${constituencyId}`);
+        this.wards = res.data;
+      } catch (err) {
+        console.error('Failed to load wards', err);
+      }
+    },
+    onCountyChange() {
+      this.profile.constituency = '';
+      this.profile.ward = '';
+      this.constituencies = [];
+      this.wards = [];
+      if (this.profile.county) {
+        this.loadConstituencies(this.profile.county);
+      }
+    },
+    onConstituencyChange() {
+      this.profile.ward = '';
+      this.wards = [];
+      if (this.profile.constituency) {
+        this.loadWards(this.profile.constituency);
       }
     },
     enableEdit() {

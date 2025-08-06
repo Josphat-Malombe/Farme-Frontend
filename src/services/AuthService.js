@@ -1,11 +1,6 @@
 import api from "./api";
 
-/*
-export async function registerUser(data) {
-    return api.post('/register/',data)
-}
 
-*/
 
 
 export const registerUser = (data) => {
@@ -13,7 +8,7 @@ export const registerUser = (data) => {
     .then(response => response)
     .catch(error => {
       console.error('Registration API error:', error.response || error);
-      throw error; // Rethrow so the component can catch it
+      throw error
     });
 };
 
