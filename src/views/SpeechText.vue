@@ -112,7 +112,7 @@ export default {
         console.error('Error sending voice message:', err);
         this.messages.push({
           role: 'agent',
-          content: 'Error: Could not process voice message.',
+          content: 'Could not process voice message! Please try again.',
         });
         this.$nextTick(() => this.scrollToBottom());
       } finally {

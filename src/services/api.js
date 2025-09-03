@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://farme-backend.onrender.com/api/',
+  baseURL: 'http://127.0.0.1:8000/api/',
 });
 
 api.interceptors.request.use(config => {
@@ -48,7 +48,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post('https://farme-backend.onrender.com/api/token/refresh/', {
+        const res = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
           refresh: localStorage.getItem('refresh')
         });
 

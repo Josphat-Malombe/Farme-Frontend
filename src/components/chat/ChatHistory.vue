@@ -50,7 +50,7 @@ export default {
         this.sessions = res.data; 
       } catch (err) {
         console.error('Error loading sessions:', err);
-        // Implement user-friendly error display here (e.g., a toast notification)
+     
       }
     },
     continueSession(sessionId) {

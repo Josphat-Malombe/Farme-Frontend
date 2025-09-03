@@ -16,3 +16,4 @@ export async function getWeather(county, constituency, ward) {
     throw error;
   }
 }
+ 

@@ -37,14 +37,14 @@ const routes = [
     path: '/auth/login',
     name: 'login',
     component: Login,
-    meta: {guest: true},
+    meta: {guest: true,title: 'login'},
     
   },
     {
     path: '/auth/register',
     name: 'register',
     component: RegisterPage,
-    meta: {guest: true},
+    meta: {guest: true,title: 'register'},
     
   },
   
@@ -56,7 +56,7 @@ const routes = [
     name: 'continue-session',
     component: TextChat,
     props: true,
-    meta:{requiresAuth: true}
+    meta:{requiresAuth: true, title: 'Chat'}
 
   },
   {
@@ -64,28 +64,28 @@ const routes = [
     name: 'speech',
     component: SpeechText,
     props: true,
-    meta: {requiresAuth: true}
+    meta: {requiresAuth: true, title: 'Speech chat'}
 
   },
   {
     path:'/profile',
     name: 'profile',
     component: ProfileView,
-    meta: {requiresAuth: true}
+    meta: {requiresAuth: true, title: 'Profile'}
 
   },
   {
     path: '/weather',
     name: 'weather',
     component: WeatherView,
-    meta: {requiresAuth: true}
+    meta: {requiresAuth: true, title: 'Weather'}
   },
 
   {
     path: '/history',
     name: 'history',
     component: ChatHistory,
-    meta:{requiresAuth: true}
+    meta:{requiresAuth: true, title: 'Chat history'}
 
   },
     {
@@ -101,6 +101,7 @@ const router = createRouter({
   routes
 })
 
+document.title = to.meta.title || 'Agriepulse';
 const publicPages = ['/', '/auth/login', '/auth/register']
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('access')
