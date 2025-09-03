@@ -101,11 +101,13 @@ const router = createRouter({
   routes
 })
 
-document.title = to.meta.title || 'Agriepulse';
+
 const publicPages = ['/', '/auth/login', '/auth/register']
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('access')
   const authRequired = !publicPages.includes(to.path)
+
+  document.title = to.meta.title || 'Agriepulse';
 
   if (authRequired && !token) {
     next('/')
